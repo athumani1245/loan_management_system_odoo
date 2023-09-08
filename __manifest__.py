@@ -17,10 +17,7 @@
     * Reports related to the Loans, Documents, Loan Papers
     * Dynamic Interest Rates Calculation
     """,
-    "website" : "http://www.pragtech.co.in",
     "init_xml" : [],
-    "demo" : [
-#         "demo/loan_demo.xml"
     ],
     "data" : [
         "security/loan_security.xml",
@@ -60,15 +57,8 @@
         "report/active_loan_by_officer.xml",
         "report/loan_ledger_card.xml",
 
-
-#         "views/loan_workflow.xml",
-#         "views/loan_wizard.xml",
-#         "views/cheque_workflow.xml",
        
     ],
-    'price':1000,
-    'currency':'EUR',
-    "active": False,
     "installable": True,
     'images': ['images/main_screenshot.png'],
 }
