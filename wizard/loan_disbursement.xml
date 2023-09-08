@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="disbursement_loan_report_form" model="ir.ui.view">
+        <field name="name">loan.report.form</field>
+        <field name="model">loan.report</field>
+        <field name="arch" type="xml">
+            <form string="Loan Reports">
+                <group>
+                    <field name="report"/>
+                    <field name="report_type" options="{'horizontal': true}" widget="radio"/>
+
+                    <field name="loan_officer_boolean"/>
+                    <field name="date_from" attrs="{'invisible': [('report', '=', 'active_loans_by_loan_officer')]}"/>
+                    <field name="date_to" />
+                    <!--                     <field name="user_id"/> -->
+                    <field name="loan_product_ids" widget="many2many_tags"/>
+                    <field name="users_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button string="Generate Report" name="generate_disbursement_report" type="object"
+                            default_focus="1" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                    <button string="Demo" type="object" name="btn_demo"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="disbursement_loan_report_action" model="ir.actions.act_window">
+        <field name="name">Loan Reports</field>
+        <field name="res_model">loan.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <report string="Loan Disbursement Report"
+            model="loan.report"
+            name="pragtech_loan_advance.disbursement_loan_report_id"
+            id="loan_disbursement_report_wizard"
+            file="pragtech_loan_advance.disbursement_report"
+            report_type="qweb-pdf"
+            paperformat="pragtech_loan_advance.disbursement_loan_report_paperformat"/>
+
+    <report string="Loan Expected Repayment Report"
+            model="loan.report"
+            name="pragtech_loan_advance.expected_repayment_loan_report_id"
+            id="expected_loan_repayment_report_wizard"
+            file="pragtech_loan_advance.expected_repayment_report"
+            report_type="qweb-pdf"
+            paperformat="pragtech_loan_advance.disbursement_loan_report_paperformat"/>
+
+    <report string="Loan Repayment Report"
+            model="loan.report"
+            name="pragtech_loan_advance.repayment_loan_report_id"
+            id="loan_repayment_report_wizard"
+            file="pragtech_loan_advance.loan_repayment_report"
+            report_type="qweb-pdf"
+            paperformat="pragtech_loan_advance.disbursement_loan_report_paperformat"/>
+
+    <report string="Active Loan by Loan Officer"
+            model="loan.report"
+            name="pragtech_loan_advance.active_loan_by_officer_report_id"
+            id="active_loan_by_officer_wizard"
+            file="pragtech_loan_advance.active_loan_by_officer"
+            report_type="qweb-pdf"
+            paperformat="pragtech_loan_advance.disbursement_loan_report_paperformat"/>
+
+    <!--    <report string="Loan Ledger Card"-->
+    <!--            model="loan.report"-->
+    <!--            name="pragtech_loan_advance.loan_ledger_card_id"-->
+    <!--            id="loan_ledger_card_report_wizard"-->
+    <!--            file="pragtech_loan_advance.loan_ledger_card"-->
+    <!--            report_type="qweb-pdf"-->
+    <!--            paperformat="pragtech_loan_advance.disbursement_loan_report_paperformat"/>-->
+
+    <menuitem name="Loan Reports" id="menu_disbursement_loan_report"
+              action="disbursement_loan_report_action" parent="pragtech_loan_advance.menu_report_account_loan"/>
+</odoo>

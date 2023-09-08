@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="expected_repayment_loan_report_id">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-foreach="docs" t-as="doc">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="html_container_header" style="width:100%;">
+                                <div class="row">
+                                    <div class="col-9">
+                                    <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" style="max-height:90pt;max-width:90%" alt="Company Logo"/>
+                                    </div>
+                                    <div class="col-3">
+                                        <span t-esc="res_company.name"/><br></br>
+                                        <span t-esc="res_company.street"/><br></br>
+                                        <span t-esc="res_company.street2"/><br></br>
+                                        <span t-esc="res_company.city"/>
+                                        <span t-esc="res_company.state_id.name"/>
+                                        <span t-esc="res_company.zip"/><br></br>
+                                        <span t-esc="res_company.country_id.name"/><br></br>
+                                        <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=5, minutes=30)).strftime('%d/%m/%Y')"/><br></br>
+                                        <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=5, minutes=30)).strftime('%H:%M:%S')"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10">
+                                    <center>
+                                        HEAD OFFICE
+                                    </center>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col-10">
+                                    <center style="color:blue;">
+                                        Expected Repayments Report
+                                    </center>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col-10">
+                                    <center>
+                                        Reporting Date From:
+                                        <span t-esc="doc.date_from"/> - <span t-esc="doc.date_to"/>
+                                    </center>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col-10">
+                                    <center>
+                                        Exclude Reversed Transactions:
+                                    </center>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <strong>A/C No.</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Name</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Due Date</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Principal Balance</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Principal Due</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Interest Due</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Penalty Due</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Total Due</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-if="doc.get_value()">
+                                            <t t-set="grand_total_records" t-value="0"/>
+                                            <t t-set="grand_principal_balance" t-value="0"/>
+                                            <t t-set="grand_principal_due" t-value="0"/>
+                                            <t t-set="grand_interest_due" t-value="0"/>
+                                            <t t-set="grand_penalty_due" t-value="0"/>
+                                            <t t-set="grand_total_due" t-value="0"/>
+                                        
+                                            <t t-foreach="doc.get_value()" t-as="loans">
+                                                <t t-foreach="loans['user_id']" t-as="o">
+                                                    <t t-set="counter" t-value="0"/>
+                                                    <t t-set="principal_balance" t-value="0"/>
+                                                    <t t-set="principal_due" t-value="0"/>
+                                                    <t t-set="interest_due" t-value="0"/>
+                                                    <t t-set="penalty_due" t-value="0"/>
+                                                    <t t-set="total_due" t-value="0.0"/>
+                                                    <tr>
+                                                        <td colspan="9" style="color:blue;">
+                                                            Loan Officer:
+                                                            <span t-esc="o.name"/>
+                                                        </td>
+                                                    </tr>
+                                                    <t t-foreach="loans['docusign_list'].get(o)" t-as="a">
+                                                        <t t-set="total_records" t-value="len(loans['docusign_list'].get(o))"/>
+                                                        <t t-set="last_amount" t-value="a.loan_id.fetch_last_installment_date()"/>
+                                                        <t t-set="counter" t-value="counter + 1"/>
+                                                        <t t-set="principal_balance" t-value="principal_due + last_amount.get('total_out_prin', 0.00)"/>
+                                                        <t t-set="principal_due" t-value="principal_due + last_amount.get('total_due_principal', 0.00)"/>
+                                                        <t t-set="interest_due" t-value="interest_due + last_amount.get('total_due_interest', 0.00)"/>
+                                                        <t t-set="penalty_due" t-value="penalty_due + last_amount.get('total_due_penalty', 0.00)"/>
+                                                        <t t-set="total_due" t-value="total_due + last_amount.get('total_due_principal',0.00) + last_amount.get('total_due_interest',0.00) + last_amount.get('total_due_penalty',0.00)"/>
+                                                        <tr t-if="doc.report_type != 'summary'">
+                                                            <th>
+                                                                <span t-esc="a.loan_id.loan_id"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="a.partner_id.name"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="a.date"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="last_amount.get('total_out_prin', 0.00)"
+                                                                      t-options="{'widget': 'monetary', 'display_currency': a.loan_id.company_id.currency_id}"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="last_amount.get('total_due_principal', 0.00)" t-options="{'widget': 'monetary', 'display_currency': a.loan_id.company_id.currency_id}"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="last_amount.get('total_due_interest', 0.00)" t-options="{'widget': 'monetary', 'display_currency': a.loan_id.company_id.currency_id}"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="last_amount.get('total_due_penalty', 0.00)" t-options="{'widget': 'monetary', 'display_currency': a.loan_id.company_id.currency_id}"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="last_amount.get('total_due_principal', 0.00) + last_amount.get('total_due_interest', 0.00) + last_amount.get('total_due_penalty', 0.00)"
+                                                                      t-options="{'widget': 'monetary', 'display_currency': a.loan_id.company_id.currency_id}"/>
+                                                            </th>
+                                                        </tr>
+                                                        
+                                                        <t t-if="counter == total_records">
+                                                        <t t-set="grand_total_records" t-value="grand_total_records+counter"/>
+                                                        <t t-set="grand_principal_balance" t-value="grand_principal_balance + principal_balance"/>
+                                                        <t t-set="grand_principal_due" t-value="grand_principal_due + principal_due"/>
+                                                        <t t-set="grand_interest_due" t-value="grand_interest_due + interest_due"/>
+                                                        <t t-set="grand_penalty_due" t-value="grand_penalty_due + penalty_due"/>
+                                                        <t t-set="grand_total_due" t-value="grand_total_due + total_due"/>
+                                                        
+                                                           <tr>
+                                                                <td style="color:blue;">
+                                                                    Total Records: <t t-esc="total_records"/>
+                                                                </td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td style="color:blue;">
+                                                                    Principal Balance: <t t-esc="principal_balance" t-options="{'widget': 'monetary', 'display_currency': a.loan_id.company_id.currency_id}"/>
+                                                                </td>
+                                                                <td style="color:blue;">
+                                                                    Principal Due: <t t-esc="principal_due" t-options="{'widget': 'monetary', 'display_currency': a.loan_id.company_id.currency_id}"/>
+                                                                </td>
+                                                                <td style="color:blue;">
+                                                                    Interest Due: <t t-esc="interest_due" t-options="{'widget': 'monetary', 'display_currency': a.loan_id.company_id.currency_id}"/>
+                                                                </td>
+                                                                <td style="color:blue;">
+                                                                    Penalty Due: <t t-esc="penalty_due" t-options="{'widget': 'monetary', 'display_currency': a.loan_id.company_id.currency_id}"/>
+                                                                </td>
+                                                                <td style="color:blue;">
+                                                                    Total Due: <t t-esc="total_due" t-options="{'widget': 'monetary', 'display_currency': a.loan_id.company_id.currency_id}"/>
+                                                                </td>
+                                                            </tr></t>
+                                                        </t>
+                                                    </t>
+                                                </t>
+                                        </t>
+                                    </tbody>
+                                <td style="color:blue;">
+                                    Grand Total Records: <span t-esc="grand_total_records"/>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td style="color:blue;">
+                                    Grand Principal Balance: <t t-esc="grand_principal_balance" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td style="color:blue;">
+                                    Grand Principal Due: <t t-esc="grand_principal_due" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td style="color:blue;">
+                                    Grand Interest Due: <t t-esc="grand_interest_due" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td style="color:blue;">
+                                   Grand Penalty Due: <t t-esc="grand_penalty_due" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td style="color:blue;">
+                                   Grand Total Due: <t t-esc="grand_total_due" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td> 
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="expected_repayment_loan_report_id_print">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-foreach="docs" t-as="doc">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="html_container_header" style="width:100%;">
+                                <div class="row">
+                                    <div class="col-9">
+                                    <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height:90pt;max-width:90%" alt="Company Logo"/>
+                                    </div>
+                                    <div class="col-3">
+                                        <span t-esc="doc.company_id.name"/><br></br>
+                                        <span t-esc="doc.company_id.street"/><br></br>
+                                        <span t-esc="doc.company_id.street2"/><br></br>
+                                        <span t-esc="doc.company_id.city"/>
+                                        <span t-esc="doc.company_id.state_id.name"/>
+                                        <span t-esc="doc.company_id.zip"/><br></br>
+                                        <span t-esc="doc.company_id.country_id.name"/><br></br>
+                                        <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=5, minutes=30)).strftime('%d/%m/%Y')"/><br></br>
+                                        <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=5, minutes=30)).strftime('%H:%M:%S')"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <center>
+                                    HEAD OFFICE
+                                </center>
+                            </div>
+                            <div>
+                                <center style="color:blue;">
+                                    Loan Disbursement Report
+                                </center>
+                            </div>
+                            <div>
+                                <center>
+                                    Reporting Date:
+                                    <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=5, minutes=30)).strftime('%d/%m/%Y')"/>
+                                </center>
+                            </div>
+                            <div>
+                                <center>
+                                    Exclude Reversed Transactions:
+                                </center>
+                            </div>
+                            <div class="row">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <strong>A/C No.</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Name</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Due Date</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Principal Balance</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Principal Due</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Interest Due</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Penalty Due</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Total Due</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="9" style="color:blue;">
+                                                Loan Officer:
+                                                <span t-esc="doc.user_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                <span t-esc="doc.loan_id.loan_id"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.partner_id.name"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.loan_id.fetch_last_installment_date().get('date')"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.loan_id.fetch_last_installment_date().get('total_out_prin', 0.00)"
+                                                      t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.loan_id.fetch_last_installment_date().get('total_due_principal', 0.00)" t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.loan_id.fetch_last_installment_date().get('total_due_interest', 0.00)" t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.loan_id.fetch_last_installment_date().get('total_due_penalty', 0.00)" t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.loan_id.fetch_last_installment_date().get('total_due_principal', 0.00) + doc.fetch_last_installment_date().get('total_due_penalty', 0.00) + doc.fetch_last_installment_date().get('total_late_fee', 0.00)" t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

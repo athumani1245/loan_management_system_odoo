@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="loan_ledger_card_id_print">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <div class="html_container_header" style="width:100%;">
+                            <div class="row">
+                                <div class="col-9">
+                                    <img t-if="res_company.logo"
+                                         t-att-src="image_data_uri(res_company.logo)"
+                                         style="max-height:90pt;max-width:90%" alt="Company Logo"/>
+                                </div>
+                                <div class="col-3">
+                                    <span t-esc="res_company.name"/>
+                                    <br></br>
+                                    <span t-esc="res_company.street"/>
+                                    <br></br>
+                                    <span t-esc="res_company.street2"/>
+                                    <br></br>
+                                    <span t-esc="res_company.city"/>
+                                    <span t-esc="res_company.state_id.name"/>
+                                    <span t-esc="res_company.zip"/>
+                                    <br></br>
+                                    <span t-esc="res_company.country_id.name"/>
+                                    <br></br>
+                                    <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=3, minutes=30)).strftime('%d/%m/%Y')"/>
+                                    <br></br>
+                                    <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=3, minutes=30)).strftime('%H:%M:%S')"/>
+                                </div>
+                            </div>
+                            <br></br>
+                        </div>
+
+                        <t t-set="counter" t-value="0"/>
+
+                        <t t-if="append">
+                            <t t-foreach="append" t-as="users">
+                                <t t-set="doc" t-value="users[0]"/>
+                                <t t-esc="doc"/>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <center>
+                                            HEAD OFFICE
+                                        </center>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="col-10">
+                                        <center style="color:blue;">
+                                            Loan Ledger Card
+                                        </center>
+                                    </div>
+                                </div>
+                                <br></br>
+                                <div class="row">
+                                    <div class="col-7">
+                                        Name:
+                                        <span t-esc="doc.get('partner_id')"/>
+                                    </div>
+                                    <div class="col-5">
+                                        Loan period in months:
+                                        <span t-esc="doc.get('month')"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-7">
+                                        Physical/Postal Address:
+                                        <span t-esc="doc.get('city')"/>,
+                                        <span t-esc="doc.get('country_id')"/>
+                                    </div>
+                                    <div class="col-5">
+                                        No. of Installments:
+                                        <span t-esc="doc.get('month')"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-7">
+                                        Loan Product:
+                                        <span t-esc="doc.get('loan_type')"/>
+                                    </div>
+                                    <div class="col-5">
+                                        Annual Int. Rate (%):
+                                        <span t-esc="doc.get('flat_pa')"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-7">
+                                        Loan No. and Cycle:
+                                        <span t-esc="doc.get('loan_id')"/>,
+                                        <span t-esc="doc.get('loan_period')"/>
+                                    </div>
+                                    <div class="col-5">
+                                        Loan Officer:
+                                        <span t-esc="doc.get('user_id')"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-7">
+                                        Loan Amount:
+                                        <span t-esc="doc.get('loan_amount')"/>
+                                    </div>
+                                    <div class="col-5">
+                                        Grace Period:
+                                        <!--                                    <span t-esc="doc.user_id.name"/>-->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-7">
+                                        Disbursement Date:
+                                        <span t-esc="doc.get('bill_date')"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-7">
+                                        Ref. No:
+                                        <span t-esc="doc.get('loan_id')"/>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <table class="table table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <strong>Trx Date</strong>
+                                                </th>
+                                                <th>
+                                                    <strong>Trx Type</strong>
+                                                </th>
+                                                <th>
+                                                    <strong>Voucher No.</strong>
+                                                </th>
+                                                <th>
+                                                    <strong>Principal</strong>
+                                                </th>
+                                                <th>
+                                                    <strong>Interest</strong>
+                                                </th>
+                                                <th>
+                                                    <strong>Penalty</strong>
+                                                </th>
+                                                <th>
+                                                    <strong>Total</strong>
+                                                </th>
+                                                <th>
+                                                    <strong>Principal Balance</strong>
+                                                </th>
+                                                <th>
+                                                    <strong>Interest Balance</strong>
+                                                </th>
+                                                <th>
+                                                    <strong>Penalty Balance</strong>
+                                                </th>
+                                                <th>
+                                                    <strong>Total Balance</strong>
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <t t-set="counter" t-value="counter + 1"/>
+
+                                            <tr>
+                                                <th>
+                                                    <span t-esc="doc.get('bill_date')"/>
+                                                </th>
+                                                <th>
+                                                    Disbursement
+                                                </th>
+                                                <th>
+                                                    <span t-esc="doc.get('dis_release_number')"/>
+                                                </th>
+                                                <th>
+                                                    <span t-esc="doc.get('total_capital', 0.00)"
+                                                          t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                    <t t-set="gross_total_capital"
+                                                       t-value="doc.get('total_capital', 0.00)"/>
+
+                                                </th>
+                                                <th>
+                                                    <span t-esc="doc.get('total_interest', 0.00)"
+                                                          t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                    <t t-set="gross_total_interest"
+                                                       t-value="doc.get('total_interest', 0.00)"/>
+                                                </th>
+                                                <th>
+                                                    <span t-esc="doc.get('total_fees', 0.00)"
+                                                          t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                    <t t-set="gross_total_fees" t-value="doc.get('total_fees', 0.00)"/>
+
+                                                </th>
+                                                <th>
+                                                    <span t-esc="doc.get('total_capital', 0.00) + doc.get('total_interest', 0.00) + doc.get('total_fees', 0.00)"
+                                                          t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                    <t t-set="gross_total"
+                                                       t-value="doc.get('total_capital', 0.00) + doc.get('total_interest', 0.00) + doc.get('total_fees', 0.00)"/>
+                                                </th>
+                                                <th>
+                                                    <span t-esc="doc.get('total_capital', 0.00)"
+                                                          t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+                                                    <t t-set="gross_total_total_capital"
+                                                       t-value="doc.get('total_capital', 0.00)"/>
+
+                                                </th>
+
+
+                                                <th>
+                                                    <span t-esc="doc.get('total_interest', 0.00)"
+                                                          t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                    <t t-set="gross_total_total_interest"
+                                                       t-value="doc.get('total_interest', 0.00)"/>
+
+                                                </th>
+                                                <th>
+                                                    <span t-esc="doc.get('total_fees', 0.00)"
+                                                          t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                    <t t-set="gross_total_total_fees"
+                                                       t-value="doc.get('total_fees', 0.00)"/>
+
+                                                </th>
+                                                <th>
+                                                    <span t-esc="doc.get('total_capital', 0.00) + doc.get('total_interest', 0.00) + doc.get('total_fees', 0.00)"
+                                                          t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                    <t t-set="gross_total_total"
+                                                       t-value="doc.get('total_capital', 0.00) + doc.get('total_interest', 0.00) + doc.get('total_fees', 0.00)"/>
+
+                                                </th>
+                                            </tr>
+
+
+                                            
+                                            <t t-set="capital_var" t-value="doc.get('total_capital', 0.00)"/>
+                                            <t t-set="interest_var" t-value="doc.get('total_interest', 0.00)"/>
+                                            <t t-set="fees_var" t-value="doc.get('total_fees', 0.00)"/>
+                                            <t t-foreach="users[1:]" t-as="loan">
+                                                <t t-set="counter" t-value="counter + 1"/>
+                                                <tr>
+                                                    <th>
+                                                        <span t-esc="loan.get('pay_date')"/>
+                                                    </th>
+                                                    <th>
+                                                        Repayment
+                                                    </th>
+                                                    <th>
+                                                        <span t-esc="loan.get('release_number')"/>
+                                                    </th>
+                                                    <th>
+                                                        <span t-esc="loan.get('principal', 0.00)"
+                                                              t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+                                                        <t t-set="gross_total_capital"
+                                                           t-value="gross_total_capital+loan.get('principal', 0.00)"/>
+
+                                                    </th>
+                                                    <th>
+                                                        <span t-esc="loan.get('interest', 0.00)"
+                                                              t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                        <t t-set="gross_total_interest"
+                                                           t-value="gross_total_interest+loan.get('interest', 0.00)"/>
+                                                    </th>
+
+                                                    <th>
+                                                        <span t-esc="loan.get('penalty', 0.00)"
+                                                              t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                        <t t-set="gross_total_fees"
+                                                           t-value="gross_total_fees+loan.get('penalty', 0.00)"/>
+
+                                                    </th>
+                                                    <th>
+                                                        <span t-esc="loan.get('principal', 0.00) + loan.get('interest', 0.00) + loan.get('penalty', 0.00)"
+                                                              t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                        <t t-set="gross_total"
+                                                           t-value="gross_total+loan.get('principal', 0.00) + loan.get('interest', 0.00) + loan.get('penalty', 0.00)"/>
+
+
+                                                    </th>
+                                                    <t t-set="capital_var"
+                                                       t-value="capital_var - loan.get('principal', 0.00)"/>
+                                                    <th>
+                                                        <t t-esc="capital_var"
+                                                           t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                        <t t-set="gross_total_total_capital"
+                                                           t-value="gross_total_total_capital+capital_var"/>
+
+                                                    </th>
+                                                    <t t-set="interest_var"
+                                                       t-value="interest_var - loan.get('interest', 0.00)"/>
+                                                    <th>
+                                                        <t t-esc="interest_var"
+                                                           t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                        <t t-set="gross_total_total_interest"
+                                                           t-value="gross_total_total_interest+interest_var"/>
+
+                                                    </th>
+                                                    <t t-set="fees_var" t-value="fees_var - loan.get('penalty', 0.00)"/>
+
+                                                    <th>
+                                                        <t t-esc="fees_var"
+                                                           t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+                                                        <t t-set="gross_total_total_fees"
+                                                           t-value="gross_total_total_fees+fees_var"/>
+                                                    </th>
+                                                    <th>
+                                                        <span t-esc="capital_var + interest_var + fees_var"
+                                                              t-options="{'widget': 'monetary', 'display_currency': doc.get('currency_id')}"/>
+
+
+                                                        <t t-set="gross_total_total"
+                                                           t-value="gross_total_total+capital_var + interest_var + fees_var"/>
+                                                    </th>
+
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </t>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

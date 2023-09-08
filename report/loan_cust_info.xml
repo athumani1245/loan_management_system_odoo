@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_cust_information">
+			<t t-call="web.external_layout">
+				<t t-set="doc" t-value="doc.with_context({'lang':doc.lang})" />
+				<div class="page">
+					<div class="oe_structure" />
+					<div class="row">
+
+
+                                    <div class="col-xs-6"  style = "position:absolute;top:0mm;left:77mm;font-size:16px;" >
+                                    <h5><strong >CUSTOMER INFORMATIONS</strong></h5> 
+                                    <br/>
+                                    </div>
+                        
+                        </div>
+                        <br />                        
+                        <p>Dear <strong><span t-field="doc.title"/>
+                                    <span t-field="doc.name"/></strong> </p>
+                        <p>    The following are the  information  that you provide to us, in case of any queries  or if there is any mistake in your information please contact your loan officer or contact our office administration </p>
+
+			
+				
+                  <table style="font-size: 14px !important; height:30mm; width:250mm;">
+                      <tr >
+
+                       <td><h5><strong> Personal Informations</strong></h5></td>
+                  </tr>
+                        <tr >
+                        <td><strong>Customer Name:</strong></td>
+                        <td><span t-field="doc.name"/></td>
+                        <td><strong>Address:</strong></td>
+                         <td><span t-field="doc.street"/>
+                              <span t-field="doc.street2"/>
+                         </td>
+                        </tr>
+
+                       <tr>
+                        <td><strong>Birth Date:</strong></td>
+                        <td><span t-field="doc.birthdate"/></td>
+                        <td><strong>Tittle:</strong></td>
+                        <td><span t-field="doc.title"/></td>
+                        
+                        </tr>
+                        <tr>
+                        <td><strong>Mobile Number 1:</strong></td>
+                        <td><span t-field="doc.phone"/></td>
+                        <td><strong>Mobile Number 2:</strong></td>
+                        <td><span t-field="doc.mobile"/></td>
+                        </tr>
+                        <tr>
+                        <td><strong>Website:</strong></td>
+                        <td><span t-field="doc.website"/></td>
+                        <td><strong>Email:</strong></td>
+                        <td><span t-field="doc.email"/></td>
+                        </tr> 
+                        <tr>
+                        <td><strong>National ID:</strong></td>
+                        <td><span t-field="doc.nida_id"/></td>
+                        <td><strong>Other ID:</strong></td>
+                        <td><span t-field="doc.other_id"/></td>
+                        </tr> 
+
+                        <tr>
+                        <td><strong>ID Provider:</strong></td>
+                        <td><span t-field="doc.provider_id"/></td>
+                        <td><strong>Customer Job:</strong></td>
+                        <td><span t-field="doc.function"/></td>
+                        </tr>
+
+                      <tr>
+                        
+                        <td><h5><strong> Physical Address Informations</strong> </h5></td>
+                         </tr>
+
+                        <tr>
+                        <td><strong>Region:</strong></td>
+                        <td><span t-field="doc.region"/></td>
+                        <td><strong>District:</strong></td>
+                         <td><span t-field="doc.district"/>
+                         </td>
+                        </tr>
+
+                       <tr>
+                        <td><strong>Ward:</strong></td>
+                        <td><span t-field="doc.ward"/></td>
+                        <td><strong>Street:</strong></td>
+                        <td><span t-field="doc.street"/>
+                        <span t-field="doc.street2"/>
+                         </td>
+                        
+                        </tr>
+                        <tr>
+                        <td><strong>Block No:</strong></td>
+                        <td><span t-field="doc.block"/></td>
+                        <td><strong>Plot No:</strong></td>
+                        <td><span t-field="doc.plot"/></td>
+                        </tr>
+
+                        <tr>
+                        <td><strong>House No:</strong></td>
+                        <td><span t-field="doc.house"/></td>
+                        <td><strong>Mjumbe:</strong></td>
+                        <td><span t-field="doc.mjumbe"/></td>
+                        </tr> 
+                         <tr>
+                        <td><strong>Land Lord Name:</strong></td>
+                        <td><span t-field="doc.lardloadname"/></td>
+                        <td><strong>Land Lord Mobile:</strong></td>
+                        <td><span t-field="doc.lardloadno1"/>,
+                        <span t-field="doc.lardloadno2"/>
+
+                  </td>
+                        </tr> 
+                  
+                    <tr>
+
+                       <td> <h5><strong> Spouse Informations</strong> </h5></td>
+                        </tr>
+                         <br />
+                        <tr>
+                        <td><strong>Name:</strong></td>
+                        <td><span t-field="doc.spousename"/></td>
+                        <td><strong>Mobile Number:</strong></td>
+                         <td><span t-field="doc.spousephone1"/>,
+                         <span t-field="doc.spousephone2"/>
+                         </td>
+                        </tr>
+
+                       <tr>
+                        <td><strong>National ID:</strong></td>
+                        <td><span t-field="doc.spousenational_id"/></td>
+                        <td><strong>Any Other ID:</strong></td>
+                        <td><span t-field="doc.spousenational_any_id"/>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td><strong>ID Provider:</strong></td>
+                        <td><span t-field="doc.spousenational_id_provider"/></td>
+                        <td><strong>Spouse Job:</strong></td>
+                        <td><span t-field="doc.spousejob"/></td>
+                        </tr>
+                        <tr>
+
+                        <td><h5><strong> Bank Informations</strong> </h5></td>
+                         </tr>
+                        <tr>
+                        <td><strong>Name:</strong></td>
+                        <td><span t-field="doc.spousename"/></td>
+                        <td><strong>Account NUmber:</strong></td>
+                         <td><span t-field="doc.bankacc"/>
+                         </td>
+                        </tr>
+
+                       <tr>
+                        <td><strong>Branch Name:</strong></td>
+                        <td><span t-field="doc.bankbranch"/></td>
+                        <td><strong>Branch COde:</strong></td>
+                        <td><span t-field="doc.bankcode"/>
+                        </td>
+                        
+                        </tr>
+                       
+                  </table>
+			<!-- <table class="table table-condensed">
+	                        <thead>
+	                            <th>Description</th>
+	                            <th>Installment Date</th>
+	                            <th>Installment</th>
+	                            <th>Interest</th>
+	                            <th>SubTotal</th>
+	                            <th>Total</th>
+	                        </thead>
+
+
+	                         <tbody>
+		                        <tr style="page-break-inside: avoid !important" t-foreach="doc" t-as="line">
+		                               <td><span t-field="line.name" /></td>
+		                               <td><span t-field="line.date" /></td>
+		                               <td align="right"><span t-field="line.birthdate" /></td>
+		                               <td align="right"><span t-field="line.name" /></td>
+		                               <td align="right"><span t-field="line.name" /></td>
+		                         
+		                        </tr>
+	                       </tbody> 
+                        
+                        </table>
+						 -->
+						
+					
+				</div>
+			</t>
+		</template>
+
+
+		<template id="loan_cust_info">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="pragtech_loan_advance.report_cust_information" t-lang="doc.lang" />
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

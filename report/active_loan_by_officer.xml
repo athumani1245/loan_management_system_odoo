@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="active_loan_by_officer_report_id">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-foreach="docs" t-as="doc">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="html_container_header" style="width:100%;">
+                                <div class="row">
+                                    <div class="col-9">
+                                    <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" style="max-height:90pt;max-width:90%" alt="Company Logo"/>
+                                    </div>
+                                    <div class="col-3">
+                                        <span t-esc="res_company.name"/><br></br>
+                                        <span t-esc="res_company.street"/><br></br>
+                                        <span t-esc="res_company.street2"/><br></br>
+                                        <span t-esc="res_company.city"/>
+                                        <span t-esc="res_company.state_id.name"/>
+                                        <span t-esc="res_company.zip"/><br></br>
+                                        <span t-esc="res_company.country_id.name"/><br></br>
+                                        <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=3, minutes=30)).strftime('%d/%m/%Y')"/><br></br>
+                                        <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=3, minutes=30)).strftime('%H:%M:%S')"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10">
+                                    <center>
+                                        HEAD OFFICE
+                                    </center>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col-10">
+                                    <center style="color:blue;">
+                                        Active Loans Report
+                                    </center>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col-10">
+                                    <center>
+                                        Reporting Date From:
+                                        <span t-esc="doc.date_from"/> - <span t-esc="doc.date_to"/>
+                                    </center>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <strong>A/C No.</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Name</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Disbursement Date</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Loan Amount</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Total Interest</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Principal Paid</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Interest Paid</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Total Paid</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Outstanding Principal</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Outstanding Interest</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Total Outstanding Balance</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-if="doc.get_value()">
+                                        	<t t-set="grand_total_records" t-value="0"/>
+                                         	<t t-set="grand_loan_amount" t-value="0.0"/>
+                                         	<t t-set="grand_loan_interest" t-value="0.0"/>
+                                         	<t t-set="grand_principal_paid" t-value="0.0"/>
+                                         	<t t-set="grand_interest_paid" t-value="0.0"/> 
+                                         	<t t-set="grand_total_paid" t-value="0.0"/>
+                                         	<t t-set="grand_outstanding_paid" t-value="0.0"/>
+                                         	<t t-set="grand_outstanding_interest" t-value="0.0"/>
+                                         	<t t-set="grand_total_outstanding_balance" t-value="0.0"/>
+                                            <t t-foreach="doc.get_value()" t-as="loans">
+                                                <t t-foreach="loans['user_id']" t-as="o">
+                                                	
+                                                	<t t-set="loan_amount" t-value="0"/>
+                                                    <t t-set="loan_interest" t-value="0"/>
+                                                    <t t-set="interest_paid" t-value="0"/>
+                                                    <t t-set="principal_paid" t-value="0"/>
+                                                    <t t-set="total_paid" t-value="0"/>
+                                                    <t t-set="outstanding_paid" t-value="0"/>
+                                                    <t t-set="outstanding_interest" t-value="0"/>
+                                                    <t t-set="total_outstanding_balance" t-value="0"/>
+                                                    <tr>
+                                                        <td colspan="9" style="color:blue;">
+                                                            Loan Officer:
+                                                            <span t-esc="o.name"/>
+                                                        </td>
+                                                    </tr>
+                                                    <t t-set="counter" t-value="0"/>
+                                                    <t t-set="total_records" t-value="0"/>
+                                                    <t t-foreach="loans['docusign_list'].get(o)" t-as="a">
+                                                    
+                                                    	<t t-set="total_records" t-value="len(loans['docusign_list'].get(o))"/>
+                                                       <t t-set="last_data" t-value="a.fetch_last_installment_date()"/>
+                                                        <t t-set="counter" t-value="counter + 1"/>
+                                                        <t t-set="loan_amount" t-value="loan_amount + a.loan_amount"/>
+                                                        <t t-set="principal_paid" t-value="principal_paid + a.total_principal_paid"/>
+                                                        <t t-set="interest_paid" t-value="interest_paid + a.total_interest_paid"/>
+                                                        <t t-set="total_paid" t-value="total_paid + a.total_fees_paid"/>
+                                                        <t t-set="outstanding_paid" t-value="outstanding_paid + last_data.get('total_out_prin', 0.00)"/>
+                                                        <t t-set="outstanding_interest" t-value="outstanding_interest +last_data.get('total_out_int', 0.00)"/>
+                                                        <t t-set="total_outstanding_balance" t-value="total_outstanding_balance + last_data.get('total_out_fees', 0.00)+ last_data.get('total_out_int', 0.00)+ last_data.get('total_out_prin', 0.00)"/>
+                                                        
+                                                        <tr t-if="doc.report_type != 'summary'">
+                                                            <th>
+                                                                <span t-esc="a.loan_id"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="a.partner_id.name"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="a.fetch_disbursement_details().get('bill_date')"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="a.loan_amount" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                            </th>
+                                                            <th>
+                                                               <t t-set="loan_interest" t-value="loan_interest + a.tot_int_amt"/>
+                                                                <span t-esc="a.fetch_last_installment_date().get('interest',0.00)" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                                <t t-set="loan_interest" t-value="loan_interest + a.fetch_last_installment_date().get('interest',0.00)"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="a.total_principal_paid" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="a.total_interest_paid" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="a.total_principal_paid + a.total_interest_paid" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                               
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="last_data.get('total_out_prin', 0.00)" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                                
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="last_data.get('total_out_int', 0.00)" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                            </th>
+                                                            <th>
+                                                                <span t-esc="last_data.get('total_out_prin', 0.00) + last_data.get('total_out_int', 0.00)" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                            </th>
+                                                        </tr>
+                                                        <t t-if="counter == total_records">
+                                                        <t t-set="grand_total_records" t-value="grand_total_records+counter"/>
+                                                        <t t-set="grand_loan_amount" t-value="grand_loan_amount + loan_amount"/>
+                                                        <t t-set="grand_loan_interest" t-value="grand_loan_interest + loan_interest"/>
+                                                        <t t-set="grand_principal_paid" t-value=" grand_principal_paid+ principal_paid"/>
+                                                        <t t-set="grand_interest_paid" t-value="grand_interest_paid + interest_paid "/> 
+                                                        <t t-set="grand_total_paid" t-value="grand_principal_paid + grand_interest_paid"/>
+                                                        <t t-set="grand_outstanding_paid" t-value="grand_outstanding_paid + outstanding_paid"/>
+                                                        <t t-set="grand_outstanding_interest" t-value="grand_outstanding_interest + outstanding_interest"/>
+                                                        <t t-set="grand_total_outstanding_balance" t-value="grand_total_outstanding_balance + total_outstanding_balance"/>
+                                                        <t t-set="currency" value="a.company_id.currency_id" />
+                                                          <tr>
+                                                                <td style="color:blue;">
+                                                                    Total Records: <t t-esc="total_records"/>
+                                                                </td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td style="color:blue;">
+                                                                    Total Loan Amount: <span t-esc="loan_amount" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                                </td>
+                                                                <td style="color:blue;">
+                                                                    Total Loan Interest: <span t-esc="loan_interest" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                                </td>
+                                                                <td style="color:blue;">
+                                                                    Total Principal Paid: <span t-esc="principal_paid" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                                </td>
+                                                                <td style="color:blue;">
+                                                                    Total Interest Paid: <span t-esc="interest_paid" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                                </td>
+                                                                <td style="color:blue;">
+                                                                    Total Paid: <span t-esc="total_paid" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                                </td>
+                                                                <td style="color:blue;">
+                                                                    Total Outstanding Paid: <span t-esc="outstanding_paid" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                                </td>
+                                                                <td style="color:blue;">
+                                                                    Total Outstanding Interest: <span t-esc="outstanding_interest" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                                </td>
+                                                                <td style="color:blue;">
+                                                                    Total Outstanding balance: <span t-esc="total_outstanding_balance" t-options="{'widget': 'monetary', 'display_currency': a.company_id.currency_id}"/>
+                                                                </td>
+                                                            </tr> 
+                                                            <t t-set="counter" t-value="0"/>
+                                                        </t></t>
+                                                        </t></t>
+                                                    </t>
+                                    </tbody>
+                                    <td style="color:blue;">
+                                    	Grand Total Records: <span t-esc="grand_total_records"/>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                  	<td style="color:blue;">
+                                   		Grand Total Loan Amount: <span t-esc="grand_loan_amount"  
+                                    								t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                  </td>
+                                  <td style="color:blue;">
+                                  		Grand Total Loan Interest: <span t-esc="grand_loan_interest"  
+                                    								t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                  </td>
+                                  <td style="color:blue;">
+                                      Grand Total Principal Paid: <span t-esc="grand_principal_paid"
+                                      								t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                  </td>
+                                  <td style="color:blue;">
+                                      Grand Total Interest Paid: <span t-esc="grand_interest_paid" 
+                                      								t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                 </td>
+                                 <td style="color:blue;">
+                                      Grand Total Paid: <span t-esc="grand_total_paid"
+                                      						t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                  </td>
+                                  <td style="color:blue;">
+                                      Grand Total Outstanding Paid: <span t-esc="grand_outstanding_paid"
+                                      							t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                 </td>
+                                 <td style="color:blue;">
+                                     Grand Total Outstanding Interest: <span t-esc="grand_outstanding_interest"
+                                     								t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                 </td>
+                                  <td style="color:blue;">
+                                     Grand Total Outstanding balance: <span t-esc="grand_total_outstanding_balance"
+                                     								t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                 </td>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="active_loan_by_officer_report_id_print">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-foreach="docs" t-as="doc">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="html_container_header" style="width:100%;">
+                                <div class="row">
+                                    <div class="col-9">
+                                    <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="max-height:90pt;max-width:90%" alt="Company Logo"/>
+                                    </div>
+                                    <div class="col-3">
+                                        <span t-esc="doc.company_id.name"/><br></br>
+                                        <span t-esc="doc.company_id.street"/><br></br>
+                                        <span t-esc="doc.company_id.street2"/><br></br>
+                                        <span t-esc="doc.company_id.city"/>
+                                        <span t-esc="doc.company_id.state_id.name"/>
+                                        <span t-esc="doc.company_id.zip"/><br></br>
+                                        <span t-esc="doc.company_id.country_id.name"/><br></br>
+                                        <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=3, minutes=30)).strftime('%d/%m/%Y')"/><br></br>
+                                        <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=3, minutes=30)).strftime('%H:%M:%S')"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <center>
+                                    HEAD OFFICE
+                                </center>
+                            </div>
+                            <div>
+                                <center style="color:blue;">
+                                    Loan Disbursement Report
+                                </center>
+                            </div>
+                            <div>
+                                <center>
+                                    Reporting Date From:
+                                    <span t-esc="context_timestamp(datetime.datetime.now() + relativedelta(hours=3, minutes=30)).strftime('%H:%M:%S')"/>
+                                </center>
+                            </div>
+                            <div>
+                                <center>
+                                    Exclude Reversed Transactions:
+                                </center>
+                            </div>
+                            <div class="row">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <strong>A/C No.</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Name</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Disbursement Date</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Loan Amount</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Total Interest</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Principal Paid</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Interest Paid</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Total Paid</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Outstanding Principal</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Outstanding Interest</strong>
+                                            </th>
+                                            <th>
+                                                <strong>Total Outstanding Balance</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="9" style="color:blue;">
+                                                Loan Officer:
+                                                <span t-esc="doc[0].user_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                <span t-esc="doc.loan_id"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.partner_id.name"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.fetch_disbursement_details().get('bill_date')"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.loan_amount" t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.tot_int_amt" t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+
+                                            <th>
+                                                <span t-esc="doc.total_principal_paid" t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.total_interest_paid" t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.total_principal_paid + doc.total_interest_paid" t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.fetch_last_installment_date().get('out_prin', 0.00)" t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.fetch_last_installment_date().get('out_int', 0.00)" t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                            <th>
+                                                <span t-esc="doc.fetch_last_installment_date().get('out_prin', 0.00) + doc.fetch_last_installment_date().get('out_int', 0.00)"
+                                                t-options="{'widget': 'monetary', 'display_currency': doc.company_id.currency_id}"/>
+                                            </th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

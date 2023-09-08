@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_letter_information">
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang':doc.partner_id.lang})" />
+                <div class="page">
+                    <div class="oe_structure" />
+                    <div class="row">
+
+                        <div class="col-xs-8"  style = "position:absolute;top:0mm;left:77mm;font-size:13px;" >
+
+                            <strong ><u>CUSTOMER LOAN APPLICATION FORM</u></strong>
+                        </div>
+                        
+                        </div>
+                        <br />                        
+                        <p>Dear <strong><span t-field="doc.partner_id.title"/>
+                                    <span t-field="doc.partner_id.name"/></strong> </p>
+                        <p>    The following are the  information  that you provide to us, in case of any queries  or if there is any mistake in your information please contact your loan officer or contact our office administration 
+                        </p>
+                        <table style="font-size: 13px !important; height:30mm; width:250mm;">
+                        <tr>
+                    <td><h6><strong><u> Personal Informations</u></strong></h6></td>
+                        </tr>
+                        <tr >
+                        <td><strong>Customer Name:</strong></td>
+                        <td><span t-field="doc.partner_id.name"/></td>
+                        <td><strong>Address:</strong></td>
+                         <td><span t-field="doc.partner_id.street"/>
+                              <span t-field="doc.partner_id.street2"/>
+                         </td>
+                        </tr>
+
+                       <tr>
+                        <td><strong>Birth Date:</strong></td>
+                        <td><span t-field="doc.partner_id.birthdate"/></td>
+                        <td><strong>Tittle:</strong></td>
+                        <td><span t-field="doc.partner_id.title"/></td>
+                        
+                        </tr>
+                        <tr>
+                        <td><strong>Mobile Number 1:</strong></td>
+                        <td><span t-field="doc.partner_id.phone"/></td>
+                        <td><strong>Mobile Number 2:</strong></td>
+                        <td><span t-field="doc.partner_id.mobile"/></td>
+                        </tr>
+                        <tr>
+                        <td><strong>Website:</strong></td>
+                        <td><span t-field="doc.partner_id.website"/></td>
+                        <td><strong>Email:</strong></td>
+                        <td><span t-field="doc.partner_id.email"/></td>
+                        </tr> 
+                        <tr>
+                        <td><strong>National ID:</strong></td>
+                        <td><span t-field="doc.partner_id.nida_id"/></td>
+                        <td><strong>Other ID:</strong></td>
+                        <td><span t-field="doc.partner_id.other_id"/></td>
+                        </tr> 
+                        <tr>
+                        <td><strong>ID Inssure:</strong></td>
+                        <td><span t-field="doc.partner_id.provider_id"/></td>
+                        <td><strong>Customer Job:</strong></td>
+                        <td><span t-field="doc.partner_id.function"/></td>
+                        </tr>
+ 
+                        <tr>
+                   <td><br/><h6><strong><u>Physical Address Informations</u></strong><br/></h6></td>
+                    </tr>
+ 
+                        <tr>
+                        <td><strong>Region/Mkoa:</strong></td>
+                        <td><span t-field="doc.partner_id.region"/></td>
+                        <td><strong>District/Wilaya:</strong></td>
+                         <td><span t-field="doc.partner_id.district"/>
+                         </td>
+                        </tr>
+                       <tr>
+                        <td><strong>Ward/Kata:</strong></td>
+                        <td><span t-field="doc.partner_id.ward"/></td>
+                        <td><strong>Street/Mtaa:</strong></td>
+                        <td><span t-field="doc.partner_id.street"/>
+                        <span t-field="doc.partner_id.street2"/>
+                         </td>
+                        </tr>
+                        <tr>
+                        <td><strong>Block No/Namba ya Kitalu:</strong></td>
+                        <td><span t-field="doc.partner_id.block"/></td>
+                        <td><strong>Plot No/Namba ya kiwanja:</strong></td>
+                        <td><span t-field="doc.partner_id.plot"/></td>
+                        </tr>
+                        <tr>
+                        <td><strong>House No / Namba ya nyumba:</strong></td>
+                        <td><span t-field="doc.partner_id.house"/></td>
+                        <td><strong>Mjumbe:</strong></td>
+                        <td><span t-field="doc.partner_id.mjumbe"/></td>
+                        </tr> 
+                         <tr>
+                        <td><strong>Land Lord Name / Jina la mwenyenyumba:</strong></td>
+                        <td><span t-field="doc.partner_id.lardloadname"/></td>
+                        <td><strong>Land Lord Mobile:</strong></td>
+                        <td><span t-field="doc.partner_id.lardloadno1"/>,
+                        <span t-field="doc.partner_id.lardloadno2"/>
+
+                  </td>
+                        </tr> 
+                     
+                 
+                   <br />
+                   <tr>
+                <td><br/><h6><strong><u>Spouse Informations</u></strong></h6> <br/></td>
+               </tr>
+                      
+                        <tr>
+                        <td><strong>Name / Jina la mwenza:</strong></td>
+                        <td><span t-field="doc.partner_id.spousename"/></td>
+                        <td><strong>Mobile Number:</strong></td>
+                         <td><span t-field="doc.partner_id.spousephone1"/>,
+                         <span t-field="doc.partner_id.spousephone2"/>
+                         </td>
+                        </tr>
+                       <tr>
+                        <td><strong>National ID:</strong></td>
+                        <td><span t-field="doc.partner_id.spousenational_id"/></td>
+                        <td><strong>Any Other ID:</strong></td>
+                        <td><span t-field="doc.partner_id.spousenational_any_id"/>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td><strong>ID Issure / Mtoaji:</strong></td>
+                        <td><span t-field="doc.partner_id.spousenational_id_provider"/></td>
+                        <td><strong>Spouse Job / Kazi ya Mwenza:</strong></td>
+                        <td><span t-field="doc.partner_id.spousejob"/></td>
+                        </tr>
+
+
+                         <tr>
+                
+
+                   <td><br/><h6><strong><u>Collateral Details</u></strong></h6><br/></td>
+                    </tr>
+                    <t t-foreach="doc.collateral_lines" t-as="x">
+                        <tr>
+                        <tr>
+                        <td><strong>Name / Jina :</strong></td>
+                        <td><span t-field="x.coll_name"/></td>
+                        <td><strong>Owner/Jina la mmiliki:</strong></td>
+                         <td><span t-field="x.coll_owner"/>
+                         </td>
+                        </tr>
+                       <tr>
+                        <td><strong>Type:</strong></td>
+                        <td><span t-field="x.type_id"/></td>
+                        <td><strong>Value:</strong></td>
+                        <td><span t-field="x.value"/>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td><strong>Last Valuation:</strong></td>
+                        <td><span t-field="x.last_date"/></td>
+                        <td><strong>Chasis Number:</strong></td>
+                        <td><span t-field="x.coll_chasis"/></td>
+                        </tr>
+                        <tr>
+                        <td><strong>Registration Number:</strong></td>
+                        <td><span t-field="x.coll_reg"/></td>
+                        <td><strong>Manufacture Year:</strong></td>
+                        <td><span t-field="x.coll_year"/></td>
+                        </tr>
+                        <tr>
+                        <td><strong>Car Color/Rangi:</strong></td>
+                        <td><span t-field="x.coll_color"/></td>
+                        <td><strong>Expiry Date:</strong></td>
+                        <td><span t-field="x.expiry_date"/></td>
+                        </tr>
+
+                        </tr>
+
+                    </t>
+                 
+
+                 <tr>
+
+                     <td><br/><h6><strong><u>Gurantor Details</u></strong></h6></td>
+                     
+
+                    </tr>
+
+                        
+                        <tr>
+                        <td><strong>Name:</strong></td>
+                        <td><span t-field="doc.proof_1.name"/></td>
+                        <td><strong>Mobile Number:</strong></td>
+                         <td><span t-field="doc.proof_1.G_phone1"/>,
+                         <span t-field="doc.proof_1.G_phone2"/>
+                         </td>
+                        </tr>
+
+                       <tr>
+                        <td><strong>Region:</strong></td>
+                        <td><span t-field="doc.proof_1.G_region"/></td>
+                        <td><strong>District:</strong></td>
+                        <td><span t-field="doc.proof_1.G_district"/>
+                        </td>
+                        </tr>
+
+                         <tr>
+                        <td><strong>Ward:</strong></td>
+                        <td><span t-field="doc.proof_1.G_ward"/></td>
+                        <td><strong>Street:</strong></td>
+                        <td><span t-field="doc.proof_1.G_street"/>
+                        </td>
+                        </tr>
+                         <tr>
+                        <td><strong>Block No:</strong></td>
+                        <td><span t-field="doc.proof_1.G_blockNo"/></td>
+                        <td><strong>Plot No:</strong></td>
+                        <td><span t-field="doc.proof_1.G_plotNo"/>
+                        </td>
+                        </tr>
+
+                         <tr>
+                        <td><strong>House No:</strong></td>
+                        <td><span t-field="doc.proof_1.G_houseNo"/></td>
+                        <td><strong>Local Gov Chair Person:</strong></td>
+                        <td><span t-field="doc.proof_1.local_gov"/>
+                        </td>
+                        </tr>
+
+                        <tr>
+                        <td><strong>Email:</strong></td>
+                        <td><span t-field="doc.proof_1.email"/></td>
+                        
+                        </tr>
+                    <tr>
+
+                    <td><br/><h6><strong>Gurantor Signature</strong></h6><br/></td>
+                        <td><br/>_________________________________________</td>
+
+                        </tr>   
+
+                     <tr>
+
+                    <td><br/><h6><strong><u>Loan Details</u></strong></h6></td>
+                    </tr>
+                        
+                        <tr>
+                        <td><strong>Loan Type:</strong></td>
+                        <td><span t-field="doc.loan_type"/></td>
+                        <td><strong>Loan Number:</strong></td>
+                         <td><span t-field="doc.loan_id"/>
+                         </td>
+                        </tr>
+
+                       <tr>
+                        <td><strong>Application Date</strong></td>
+                        <td><span t-field="doc.apply_date"/></td>
+                        <td><strong>Loan Purpose / Description:</strong></td>
+                        <td><span t-field="doc.name"/>
+                        </td>
+                        </tr>
+
+                         <tr>
+                        <td><strong>Ammount Requested:</strong></td>
+                        <td><span t-field="doc.req_amt"/></td>
+                        <td><strong>Loan Period:</strong></td>
+                        <td><span t-field="doc.loan_period"/>
+                        </td>
+
+                        </tr>
+                         <tr>
+                        <td><strong>Loan Officer:</strong></td>
+                        <td><span t-field="doc.user_id"/></td>
+                        <td><strong>Payment Frequency:</strong></td>
+                        <td><span t-field="doc.payment_freq"/>
+                        </td>
+                        </tr>
+
+                        <tr>
+
+                    <td><br/><br/><br/><br/><h6><strong><u>Bank Details</u></strong></h6></td>
+                    </tr>
+                        
+                        <tr>
+                        <td><strong>Name / Jina la Bank:</strong></td>
+                        <td><span t-field="doc.partner_id.bankname"/></td>
+                        <td><strong>Account NUmber:</strong></td>
+                         <td><span t-field="doc.partner_id.bankacc"/>
+                         </td>
+                        </tr>
+
+                       <tr>
+                        <td><strong>Branch Name:</strong></td>
+                        <td><span t-field="doc.partner_id.bankbranch"/></td>
+                        <td><strong>Bank Code:</strong></td>
+                        <td><span t-field="doc.partner_id.bankcode"/>
+                        </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                    <td><br/><h6><strong>Customer Signature</strong></h6><br/></td>
+                        <td><br/>____________________</td><td><br/><h6><strong>Finger Print</strong></h6></td> <td><br/>____________________</td>
+
+                        </tr>
+
+
+                          <tr>
+
+                    <td><br/><h6><strong>Date</strong></h6><br/></td>
+                        <td><br/>____________________</td>
+
+                        </tr>
+
+
+
+                         <tr>
+
+                    <td><br/><br/><br/><h6><strong>FOR OFFICIAL USE ONLY</strong></h6>
+                    <br/></td>
+                    
+
+                        </tr>
+
+
+
+
+                <tr>
+
+                <td><h6><strong>Office Manager</strong></h6></td>
+                </tr>
+                 <tr>
+                    <td>Mention all the required document which has been </td>
+                    <td>attached and verified__________________________ </td>
+                    <td>__________________________ </td>
+                    <td>_________________ </td>
+
+                    </tr>
+
+                <tr>
+                    <td>Signature __________________________</td>
+                     </tr>
+
+                <tr>
+                 <td><br/><br/><h6><strong>Credit Officer</strong></h6></td>
+                </tr>
+
+                <tr>
+                <td >Are you satisfied with the attached documents?</td><td >YES/NO______________________</td>
+            </tr>
+                 <tr>
+                  <td>if YES, forward the attachment to technician </td>
+                  <td>for collateral inspection if no return to</td>
+                  <td>office manager</td>
+                    
+                    
+                    </tr>
+
+
+
+
+
+
+
+
+
+
+
+                                             
+                  </table>
+                 
+                </div>
+            </t>
+        </template>
+
+        <template id="merge_letter">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="pragtech_loan_advance.report_letter_information" t-lang="doc.partner_id.lang" />
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
